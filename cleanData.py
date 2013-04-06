@@ -1,4 +1,7 @@
-text = [line.strip() for line open("rawData.txt")]
+import nltk
+text = [line.strip() for line in open("data/rawdata.txt")]
+
+punct = '!,.?";\''
 
 filt = []
 filt.append("Contact Us /")
@@ -10,12 +13,21 @@ filt.append("References")
 
 for line in text:
 	out = True
-	if line = "":
+	if line == "":
 		out = False
 	for s in filt:
 		if line==s:
 			out = False
-	if line[0]=='-' and line[-1]=='-':
+	if line!="" and line[0]=='-' and line[-1]=='-':
 		out = False
+	if line.endswith('...'):
+		line=line[:-3]
 	if out:
-		print line
+		words = nltk.word_tokenize(line)
+		s=""
+		for word in words:
+			if word[-1] in punct:
+				s+=word[:-1]+" "
+			elif word not in punct:
+				s+=word+" "
+		print s.lower()
